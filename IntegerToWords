@@ -1,0 +1,59 @@
+import java.util.Scanner;
+
+public class IntegerToWords {
+   private static final String[] belowTwenty = new String[]{"", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"};
+   private static final String[] tens = new String[]{"", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"};
+   private static final String[] thousands = new String[]{"", "Thousand", "Million", "Billion"};
+
+   public IntegerToWords() {
+   }
+
+   public static String numberToWords(int var0) {
+      if (var0 == 0) {
+         return "Zero";
+      } else if (var0 < 0) {
+         return "Negative " + numberToWords(-var0);
+      } else {
+         StringBuilder var1 = new StringBuilder();
+
+         for(int var2 = 0; var0 > 0; ++var2) {
+            if (var0 % 1000 != 0) {
+               String var3 = helper(var0 % 1000);
+               if (!var3.isEmpty()) {
+                  if (var1.length() == 0) {
+                     var1.insert(0, var3 + (thousands[var2].isEmpty() ? "" : " " + thousands[var2]));
+                  } else {
+                     var1.insert(0, var3 + (thousands[var2].isEmpty() ? "" : " " + thousands[var2]) + " ");
+                  }
+               }
+            }
+
+            var0 /= 1000;
+         }
+
+         return var1.toString().trim();
+      }
+   }
+
+   private static String helper(int var0) {
+      if (var0 == 0) {
+         return "";
+      } else if (var0 < 20) {
+         return belowTwenty[var0];
+      } else if (var0 < 100) {
+         String var1 = tens[var0 / 10];
+         return var1 + (var0 % 10 != 0 ? " " + helper(var0 % 10) : "");
+      } else {
+         String var10000 = belowTwenty[var0 / 100];
+         return var10000 + " Hundred" + (var0 % 100 != 0 ? " " + helper(var0 % 100) : "");
+      }
+   }
+
+   public static void main(String[] var0) {
+      Scanner var1 = new Scanner(System.in);
+      System.out.print("Enter an integer: ");
+      int var2 = var1.nextInt();
+      System.out.println(numberToWords(var2));
+      var1.close();
+   }
+}
